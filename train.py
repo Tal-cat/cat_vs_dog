@@ -86,7 +86,7 @@ def train(model, log_dir=None, train_data=None, valid_data=None, optimizer=None,
             print('epoch = % 3d   train accuracy = %0.3f   valid accuracy = %0.3f'%(epoch, np.mean(accuracies), np.mean(val_accuracies)))
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # allow train in command line
     import torch
     # Parse all input arguments
     from argparse import ArgumentParser
