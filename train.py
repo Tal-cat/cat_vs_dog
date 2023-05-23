@@ -6,13 +6,13 @@ def train(model, log_dir=None, train_data=None, valid_data=None, optimizer=None,
     from data import load
     import numpy as np
 
-    # Load so that it can iterate later
+    # use pytorch dataset to load so that it can iterate later
     if train_data is None:
         train_data = load.get_dogs_and_cats(resize=resize, batch_size=batch_size, is_resnet=is_resnet)
     if valid_data is None:
         valid_data = load.get_dogs_and_cats('valid', resize=resize, batch_size=batch_size, is_resnet=is_resnet)
     if optimizer is None:
-        optimizer = torch.optim.Adam(model.parameters())
+        optimizer = torch.optim.Adam(model.parameters()) # Adam default
     if schedule_lr:
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience=50)
 
@@ -37,7 +37,7 @@ def train(model, log_dir=None, train_data=None, valid_data=None, optimizer=None,
     for epoch in range(n_epochs):
 
         accuracies = []
-        for it, (data, label) in enumerate(train_data):
+        for it, (data, label) in enumerate(train_data): # 可iterate
             # Transfer the data to a GPU (optional)
             if device is not None:
                 data, label = data.to(device), label.to(device)
