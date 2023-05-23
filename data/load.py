@@ -8,7 +8,7 @@ THIS_DIR = path.dirname(path.abspath(__file__))
 
 def get_transform(resize=None, random_crop=None, random_horizontal_flip=False, normalize=False, is_resnet=False):
 	import torchvision
-	if is_resnet:
+	if is_resnet: # pre-train model
 		return torchvision.transforms.Compose([
 			torchvision.transforms.Scale(256),
 			torchvision.transforms.CenterCrop(224),
@@ -16,12 +16,12 @@ def get_transform(resize=None, random_crop=None, random_horizontal_flip=False, n
 			torchvision.transforms.Normalize(mean=[0.485, 0.456, 0.406],
 				std=[0.229, 0.224, 0.225])])
 
-	transform = []
+	transform = [] # resize images
 	if resize is not None:
 		transform.append(torchvision.transforms.Resize(resize))
-	if random_crop is not None:
+	if random_crop is not None: # data augumentation
 		transform.append(torchvision.transforms.RandomResizedCrop(random_crop))
-	if random_horizontal_flip:
+	if random_horizontal_flip: # data augumentation
 		transform.append(torchvision.transforms.RandomHorizontalFlip())
 	transform.append(torchvision.transforms.ToTensor())
 	if normalize:
@@ -31,11 +31,12 @@ def get_transform(resize=None, random_crop=None, random_horizontal_flip=False, n
 
 def dogs_and_cats_dataset(split='train', transform=None):
 	import torchvision
-	return torchvision.datasets.ImageFolder(path.join(THIS_DIR, 'dogs_and_cats', split), transform=transform)
+	return torchvision.datasets.ImageFolder(path.join(THIS_DIR, 'dogs_and_cats', split), transform=transform) # transform
 
 
 def get_dogs_and_cats(split='train', batch_size=1, num_workers=4, **kwargs):
 	dataset = dogs_and_cats_dataset(split, get_transform(**kwargs))
+	# batch
 	return torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=True, drop_last=True, num_workers=num_workers)
 
 
