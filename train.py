@@ -6,6 +6,7 @@ def train(model, log_dir=None, train_data=None, valid_data=None, optimizer=None,
     from data import load
     import numpy as np
 
+    # Load so that it can iterate later
     if train_data is None:
         train_data = load.get_dogs_and_cats(resize=resize, batch_size=batch_size, is_resnet=is_resnet)
     if valid_data is None:
